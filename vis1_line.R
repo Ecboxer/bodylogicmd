@@ -48,4 +48,5 @@ df_mat %>%
 # TODO include non-states
 # Decide on best metric
 # Neaten
+# Look at A7.2 for sex
 df_mat %>% tail()

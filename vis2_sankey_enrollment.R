@@ -60,3 +60,7 @@ sankeyNetwork(Links=df_sex_enr_sankey,
               units='enrollees',
               fontSize=16,
               nodeWidth=30)
+
+# TODO Neaten
+# Animation?
+# Add state
