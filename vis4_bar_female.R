@@ -138,6 +138,7 @@ p4_dot
 p4_dot_note <- ggdraw(add_sub(p4_dot,
                'Missing data for graduates of CUNY and Carle Illinois',
                x=.827))
-ggsave('vis4_dot.svg', plot=p4_dot_note,
-       device='svg', path='assets',
-       width=20, height=16)
+p4_dot_note
+# ggsave('vis4_dot.svg', plot=p4_dot_note,
+#        device='svg', path='assets',
+#        width=20, height=16)

@@ -32,9 +32,9 @@ p3_bar <- df_app %>%
   labs(fill='Race/Ethnicity') +
   xlab('') + ylab('Share of applicants')
 p3_bar
-ggsave('vis3_bar.svg', plot=p3_bar,
-       device='svg', path='assets',
-       width=20, height=16)
+# ggsave('vis3_bar.svg', plot=p3_bar,
+#        device='svg', path='assets',
+#        width=20, height=16)
 
 # Maybe switch to matriculants?
 # Perc of matriculants by state and race

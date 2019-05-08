@@ -103,12 +103,13 @@ p5_sb <- statebins_continuous(df_pop_sb_norm,
                      text_color='Black',
                      value_col='pop_norm',
                      brewer_pal='Blues',
-                     font_size=8,
+                     fontSize=4,
                      legend_title='Measure of popularity',
                      legend_position='bottom')
 p5_sb_note <- ggdraw(add_sub(p5_sb,
                'Popularity is measured as the percentage of medical students planning to practice in a state,\n normalized by the total medical student population for that state\n
                Legend goes from 0.00 to 0.25 in increments of 0.05'))
-ggsave('vis5_sb.svg', plot=p5_sb_note,
-       device='svg', path='assets',
-       width=20, height=16)
+p5_sb_note
+# ggsave('vis5_sb.svg', plot=p5_sb_note,
+#        device='svg', path='assets',
+#        width=20, height=16)
