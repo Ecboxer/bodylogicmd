@@ -49,15 +49,12 @@ df_sex_enr_sankey <- df_sex_enr %>%
   filter(source!='All') %>% 
   filter(target!='Total for Men') %>% 
   filter(target!='Total for Women')
-
 df_sex_enr_sankey %>% head()
 
 idx_nodes <- function (node_name) {
   which(nodes_list_states==node_name) - 1
 }
 df_sex_enr_sankey$source_idx <- df_sex_enr_sankey$source %>%
-  lapply(idx_nodes) %>% unlist()
-df_sex_enr_sankey$target %>% 
   lapply(idx_nodes) %>% unlist()
 df_sex_enr_sankey$target_idx <- df_sex_enr_sankey$target %>% 
   lapply(idx_nodes) %>% unlist()
@@ -70,17 +67,18 @@ df_race_sankey <- df_race %>%
   filter(State!='Total Enrollment') %>% 
   gather(key=race, value=count,
          -c(State, `Medical School`)) %>% 
-  group_by(State) %>% 
+  filter(race!='Unduplicated\nTotal \nEnrollment') %>%
+  group_by(State, race) %>% 
   mutate(state_count=sum(count)) %>% 
   ungroup() %>% 
   select(State, race, state_count) %>% 
-  unique() %>% 
+  unique() %>%
   mutate(race=str_replace_all(race,
                               "[\r\n]", ''),
-         race=str_squish(race),
-         race=ifelse(race=='UnduplicatedTotal Enrollment',
-                     'Multiple Race/Ethnicity',
-                     race))
+         race=str_squish(race))
+# Remove multiple races
+df_nodes_st2reg <- df_nodes_st2reg[-8,]
+
 df_race_sankey$source_idx <- df_race_sankey$race %>% 
   lapply(idx_nodes) %>% unlist()
 df_race_sankey$target_idx <- df_race_sankey$State %>% 
@@ -88,7 +86,7 @@ df_race_sankey$target_idx <- df_race_sankey$State %>%
 df_race_sankey <- df_race_sankey %>% 
   select(-c(State, race)) %>% 
   rename(value=state_count)
-
+df_race_sankey %>% head()
 df_sankey_full <- rbind(df_sex_enr_sankey,
                         df_race_sankey)
 
@@ -124,5 +122,74 @@ p2_sankey_st <- sankeyNetwork(Links=df_sankey_states,
               fontSize=16,
               nodeWidth=30)
 p2_sankey_st
-# TODO Neaten
+
 # Truncate to just race->region
+df_nodes_race <- df_nodes_states[seq(1,10),]
+df_nodes_region <- data.frame(name=c('Northeast',
+                  'Central',
+                  'South',
+                  'West'))
+df_nodes_st2reg <- rbind(df_nodes_race,
+                         df_nodes_region)
+ne_list <- c('CT','DE','DC','ME','MD','MA','NH',
+             'NJ','NY','PA','RI','VT')
+c_list <- c('IL','IN','IA','KS','MI','MN','MO',
+            'NE','ND','OH','SD','WI')
+s_list <- c('AL','AR','FL','GA','KY','LA','MS',
+            'NC','OK','PR','SC','TN','TX','VA','WV')
+w_list <- c('AK','AZ','CA','CO','HI','ID','MT',
+            'NV','NM','OR','UT','WA','WY')
+idx_nodes <- function (node_name) {
+  if (node_name%in%ne_list) {
+    return('Northeast')
+  } else if (node_name%in%c_list) {
+    return('Central')
+  } else if (node_name%in%s_list) {
+    return('South')
+  } else if (node_name%in%w_list) {
+    return('West')
+  }
+}
+df_race_reg_sankey <- df_race %>%
+  filter(State!='Total Enrollment') %>% 
+  gather(key=race, value=count,
+         -c(State, `Medical School`)) %>%
+  filter(race!='Unduplicated\nTotal \nEnrollment') %>% 
+  group_by(State, race) %>% 
+  mutate(state_count=sum(count)) %>% 
+  ungroup() %>% 
+  select(State, race, state_count) %>% 
+  unique() %>% 
+  mutate(race=str_replace_all(race,
+                              "[\r\n]", ''),
+         race=str_squish(race))
+df_race_reg_sankey$Region <- df_race_reg_sankey$State %>% 
+  lapply(idx_nodes) %>% unlist()
+
+idx_nodes <- function (node_name) {
+  which(df_nodes_st2reg==node_name) - 1
+}
+df_race_reg_sankey$source_idx <- df_race_reg_sankey$race %>% 
+  lapply(idx_nodes) %>% unlist()
+df_race_reg_sankey$target_idx <- df_race_reg_sankey$Region %>% 
+  lapply(idx_nodes) %>% unlist()
+df_race_reg_sankey <- df_race_reg_sankey %>% 
+  select(value=state_count,
+         source_idx, target_idx)
+
+df_race_reg_sankey <- df_race_reg_sankey %>% 
+  group_by(target_idx, source_idx) %>% 
+  mutate(value_reg=sum(value)) %>% 
+  select(-value) %>% unique()
+
+# Create race->region sankey network
+p2_sankey_reg <- sankeyNetwork(Links=df_race_reg_sankey,
+                              Nodes=df_nodes_st2reg,
+                              Source='source_idx',
+                              Target='target_idx',
+                              Value='value_reg',
+                              NodeID='name',
+                              units='enrolled students',
+                              fontSize=16,
+                              nodeWidth=30)
+p2_sankey_reg
