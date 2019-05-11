@@ -50,10 +50,13 @@ k <- fromJSON(file='data/state_matrix.json')
 l <- fromJSON(file='data/states_list.json')
 state_list <- l$list
 state_list
-k$matrix
-apply(mat_region, 1, rev)
-t(mat_region)
-mat_2 <- matrix(bdiag(mat_region, mat_region), 8)
-mat_2
-apply(mat_2, 1, rev)
-chordDiagram(mat_2)
+mat_state_temp <- k$matrix
+mat_state <- do.call(rbind, mat_state_temp)
+
+states_tr <- paste0(state_list, '-trained')
+states_pr <- paste0(state_list, '-practicing')
+rownames(mat_state) <- states_tr
+colnames(mat_state) <- states_pr
+states_order <- c(rev(states_pr), states_tr)
+chordDiagram(mat_state,
+             order=states_order)
