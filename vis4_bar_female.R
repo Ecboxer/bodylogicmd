@@ -133,7 +133,8 @@ p4_dot <- df_dot_plot %>%
           subtitle='2018-2019') +
   xlab('') + ylab('Percentage of Students') +
   scale_y_continuous(labels=scales::percent_format(accuracy=1)) +
-  scale_color_discrete_qualitative(palette='Dark 3')
+  scale_color_discrete_qualitative(palette='Dark 3') +
+  theme(panel.grid.major.y=element_line(colour='black'))
 p4_dot
 p4_dot_note <- ggdraw(add_sub(p4_dot,
                'Missing data for graduates of CUNY and Carle Illinois',
