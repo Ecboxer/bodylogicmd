@@ -36,9 +36,10 @@ p3_bar
 #        device='svg', path='assets',
 #        width=20, height=16)
 
-# Maybe switch to matriculants?
+# TODO switch to matriculants?
+# Switch x to %
 # Perc of matriculants by state and race
-df_mat %>%
+p3_bar_matdf_mat %>%
   filter(`State of Legal Residence`!='Total for the Region') %>%
   select(-Total) %>% 
   rename(state=`State of Legal Residence`) %>% 
@@ -53,7 +54,18 @@ df_mat %>%
                y=perc_mat,
                fill=race),
            stat='identity') +
-  coord_flip()
+  coord_flip() +
+  scale_fill_discrete_qualitative(palette='Dynamic') +
+  theme_eric() +
+  ggtitle(label='Race/ethnicity of medical school students by state of legal residence',
+          subtitle='2018-2019') +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1)) +
+  labs(fill='Race/Ethnicity') +
+  xlab('') + ylab('Percentage of students')
+p3_bar_mat
+# ggsave('vis3_bar_mat.svg', plot=p3_bar_mat,
+#        device='svg', path='assets',
+#        width=20, height=16)
 
 # TODO decide on best metric,
 # is applicant or matriculant used in other assets?
