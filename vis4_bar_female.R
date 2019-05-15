@@ -143,3 +143,79 @@ p4_dot_note
 # ggsave('vis4_dot.svg', plot=p4_dot_note,
 #        device='svg', path='assets',
 #        width=20, height=16)
+
+# Split into top and bottom plots
+p4_dot_top <- df_dot_plot %>% head(10) %>% 
+  mutate(`Medical School`=as_factor(`Medical School`),
+         `Medical School`=factor(`Medical School`,
+                                 levels=rev(school_order))) %>% 
+  gather(key=Type,
+         value=Count,
+         -c(`Medical School`)) %>% 
+  mutate(Count=Count/100) %>% 
+  ggplot() +
+  geom_hline(yintercept=.5,
+             linetype='dotted',
+             size=2) +
+  geom_point(aes(x=`Medical School`,
+                 y=Count,
+                 color=Type,
+                 group=Type),
+             size=10,
+             alpha=.8) +
+  coord_flip() +
+  theme_eric() +
+  ggtitle('Top 10 medical schools for female students',
+          subtitle='2018-2019') +
+  xlab('') + ylab('Percentage of Students') +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1),
+                     limits=c(.35,.65)) +
+  scale_color_discrete_qualitative(palette='Dark 3') +
+  theme(panel.grid.major.y=element_line(colour='black'))
+p4_dot_top
+p4_dot_top_note <- ggdraw(add_sub(p4_dot_top,
+                              'Missing data for graduates of CUNY\nSchools ordered by percentage of female applicants',
+                              x=.827))
+p4_dot_top_note
+
+p4_dot_bottom <- df_dot_plot %>% tail(10) %>% 
+  mutate(`Medical School`=as_factor(`Medical School`),
+         `Medical School`=factor(`Medical School`,
+                                 levels=rev(school_order))) %>% 
+  gather(key=Type,
+         value=Count,
+         -c(`Medical School`)) %>% 
+  mutate(Count=Count/100) %>% 
+  ggplot() +
+  geom_hline(yintercept=.5,
+             linetype='dotted',
+             size=2) +
+  geom_point(aes(x=`Medical School`,
+                 y=Count,
+                 color=Type,
+                 group=Type),
+             size=10,
+             alpha=.8) +
+  coord_flip() +
+  theme_eric() +
+  ggtitle('Bottom 10 medical schools for female students',
+          subtitle='2018-2019') +
+  xlab('') + ylab('Percentage of Students') +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1),
+                     limits=c(.35,.65)) +
+  scale_color_discrete_qualitative(palette='Dark 3') +
+  theme(panel.grid.major.y=element_line(colour='black'))
+p4_dot_bottom
+p4_dot_bottom_note <- ggdraw(add_sub(p4_dot_bottom,
+                                  'Missing data for graduates of Carle Illinois\nSchools ordered by percentage of female applicants',
+                                  x=.827))
+p4_dot_bottom_note
+
+# ggsave('vis4_dot_top.svg', 
+#        plot=p4_dot_top_note,
+#        device='svg', path='assets',
+#        width=20, height=16)
+# ggsave('vis4_dot_bottom.svg', 
+#        plot=p4_dot_bottom_note,
+#        device='svg', path='assets',
+#        width=20, height=16)
