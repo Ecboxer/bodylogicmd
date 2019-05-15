@@ -193,3 +193,97 @@ p2_sankey_reg <- sankeyNetwork(Links=df_race_reg_sankey,
                               fontSize=16,
                               nodeWidth=30)
 p2_sankey_reg
+
+# Sex -> Race
+df_sex_enr_sankey %>%
+  select(value) %>% sum()
+
+# Race -> Region
+df_race_reg_sankey %>% 
+  select(value_reg) %>% sum()
+
+# Combined Sex -> Race -> Region
+df_race_reg_sankey <- df_race_reg_sankey %>% 
+  select(value=value_reg,
+         source_idx,
+         target_idx)
+
+# Write full nodes dataframe
+df_temp <- as_data_frame(c('Men','Women')) %>% 
+  select(name=value)
+df_nodes_full <- rbind(df_temp,
+      df_nodes_st2reg)
+
+# Shift Race -> Region indices by two
+df_race_reg_shift <- df_race_reg_sankey %>% 
+  ungroup() %>% 
+  mutate(source_idx=source_idx+2,
+         target_idx=target_idx+2)
+
+df_sankey_full <- rbind(df_sex_enr_sankey, 
+      df_race_reg_shift)
+
+# Create Sex->Race->Region sankey network
+p2_sankey_full <- sankeyNetwork(Links=df_sankey_full,
+                               Nodes=df_nodes_full,
+                               Source='source_idx',
+                               Target='target_idx',
+                               Value='value',
+                               NodeID='name',
+                               units='enrolled students',
+                               fontSize=16,
+                               nodeWidth=30)
+p2_sankey_full
+
+# Group races apart from White, Hispanic/Latino, 
+# Black/African-American, Asian into Other
+other_group <- c(3,7,10,11,12)
+df_nodes_other <- df_nodes_full[-other_group,]
+df_nodes_other
+# Move values in other_group to Other idx 7
+df_nodes_full[1,] %>% as.character()
+full2other <- function(idx) {
+  return(as.character(df_nodes_full[idx+1,]))
+}
+df_sankey_full$source_name <- df_sankey_full$source_idx %>% 
+  lapply(full2other) %>% unlist()
+df_sankey_full$target_name <- df_sankey_full$target_idx %>% 
+  lapply(full2other) %>% unlist()
+
+other2idx <- function(other_name) {
+  if (other_name%in%df_nodes_other$name) {
+    return(which(df_nodes_other==other_name))
+  } else {
+    return(7)
+  }
+}
+df_sankey_full$source_idx_other <- df_sankey_full$source_name %>% 
+  lapply(other2idx) %>% unlist()
+df_sankey_full$target_idx_other <- df_sankey_full$target_name %>% 
+  lapply(other2idx) %>% unlist()
+
+# Group Other idx 7
+df_sankey_other <- df_sankey_full %>% 
+  select(value, 
+         source_idx_other, 
+         target_idx_other) %>% 
+  group_by(source_idx_other,
+           target_idx_other) %>% 
+  summarise(value=sum(value)) %>% 
+  ungroup()
+
+# Subtract off 1
+df_sankey_other <- df_sankey_other %>% 
+  mutate(source_idx_other=source_idx_other-1,
+         target_idx_other=target_idx_other-1)
+
+p2_sankey_other <- sankeyNetwork(Links=df_sankey_other,
+              Nodes=df_nodes_other,
+              Source='source_idx_other',
+              Target='target_idx_other',
+              Value='value',
+              NodeID='name',
+              units='enrolled students',
+              fontSize=16,
+              nodeWidth=30)
+p2_sankey_other
