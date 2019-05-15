@@ -79,6 +79,12 @@ p7_spec <- df_spec_both %>%
                y=Median,
                fill=c),
            stat='identity') +
+  geom_text(aes(x=reorder(Department, Median),
+                y=Median,
+                label=Department),
+            color='white',
+            size=5,
+            position=position_stack(vjust=0.5)) +
   coord_flip() +
   theme_eric() +
   theme(legend.position='None') +
