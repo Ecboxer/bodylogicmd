@@ -73,7 +73,13 @@ p7_spec <- df_spec_both %>%
   mutate(c=ifelse(Department%in%df_spec_top$Department,
                   'high',
                   'low'),
-         Median=Median*1000) %>% 
+         Median=Median*1000,
+         Median_label=formatC(Median,
+                              format='f',
+                              big.mark=",",
+                              digits=0),
+         Median_label=paste('$',
+                            Median_label)) %>% 
   ggplot() + 
   geom_bar(aes(x=reorder(Department, Median),
                y=Median,
@@ -81,7 +87,7 @@ p7_spec <- df_spec_both %>%
            stat='identity') +
   geom_text(aes(x=reorder(Department, Median),
                 y=Median,
-                label=Department),
+                label=Median_label),
             color='white',
             size=5,
             position=position_stack(vjust=0.5)) +
