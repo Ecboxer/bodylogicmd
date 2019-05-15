@@ -238,6 +238,7 @@ p2_sankey_full
 # Group races apart from White, Hispanic/Latino, 
 # Black/African-American, Asian into Other
 other_group <- c(3,7,10,11,12)
+df_nodes_full
 df_nodes_other <- df_nodes_full[-other_group,]
 df_nodes_other
 # Move values in other_group to Other idx 7
