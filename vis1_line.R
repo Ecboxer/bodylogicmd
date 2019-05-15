@@ -71,6 +71,49 @@ p1_line
 #        device='svg', path='assets',
 #        width=20, height=16)
 
+# Split into two line charts, app and mat
+# Change y-axis into % of total
+# Applicants -> df1 Matriculants -> df2
+p1_line_app <- df1 %>% 
+  group_by(year) %>% 
+  mutate(total_year=sum(count),
+         perc_year=count/total_year) %>% 
+  ggplot(aes(x=year, y=perc_year,
+             color=Region, group=Region)) +
+  geom_line(size=2) + geom_point(size=3) +
+  scale_color_discrete_qualitative(palette='Dark 3') +
+  theme_eric() +
+  ggtitle(label='Medical school applicants by region of legal residence',
+          subtitle='2009-2018') +
+  xlab('') + ylab('Percentage of Students') +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1),
+                     limits=c(.18,.36),
+                     breaks=seq(.18,.36,by=0.02))
+p1_line_app
+
+p1_line_mat <- df2 %>% 
+  group_by(year) %>% 
+  mutate(total_year=sum(count),
+         perc_year=count/total_year) %>% 
+  ggplot(aes(x=year, y=perc_year,
+             color=Region, group=Region)) +
+  geom_line(size=2) + geom_point(size=3) +
+  scale_color_discrete_qualitative(palette='Dark 3') +
+  theme_eric() +
+  ggtitle(label='Medical school matriculants by region of legal residence',
+          subtitle='2009-2018') +
+  xlab('') + ylab('Percentage of Students') +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1),
+                     limits=c(.18,.36),
+                     breaks=seq(.18,.36,by=0.02))
+p1_line_mat
+
+# ggsave('vis1_line_app.svg', plot=p1_line_app,
+#        device='svg', path='assets',
+#        width=20, height=16)
+# ggsave('vis1_line_mat.svg', plot=p1_line_mat,
+#        device='svg', path='assets',
+#        width=20, height=16)
 
 # Scratch: too many states
 # Number of applicants by state
