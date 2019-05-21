@@ -155,6 +155,20 @@ p1_bfly <- ggplot(df_bfly, aes(x=Region,
   geom_bar(data=subset(df_bfly,
                    student_type=='Matriculations'),
            stat='identity') +
+  geom_text(data=subset(df_bfly,
+                        student_type=='Applications'),
+            aes(label=paste(round(perc_students,3)*100,
+                            '%', sep='')),
+            color='white',
+            size=8,
+            position=position_stack(vjust=0.5)) +
+  geom_text(data=subset(df_bfly,
+                        student_type=='Matriculations'),
+            aes(label=paste(round(perc_students,3)*100,
+                            '%', sep='')),
+            color='white',
+            size=8,
+            position=position_stack(vjust=0.5)) +
   coord_flip() +
   theme_eric() +
   ggtitle('Medical school applications and matriculations by region',
