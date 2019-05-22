@@ -19,7 +19,7 @@ sal_order <- df_salary %>%
   select(Institution) %>% pull()
 
 # Highest salaried professors
-p7_inst <- df_salary %>% 
+p7_inst <- df_salary %>%
   arrange(desc(Professors)) %>% 
   gather(key=Position,
          value=Salary,
@@ -29,6 +29,7 @@ p7_inst <- df_salary %>%
   mutate(Institution=as_factor(Institution),
          Institution=factor(Institution,
                             levels=rev(sal_order))) %>% 
+  filter(Position!='Unranked') %>% 
   ggplot() +
   geom_point(aes(x=reorder(Institution,
                            -Salary),
@@ -36,14 +37,23 @@ p7_inst <- df_salary %>%
                  group=Position,
                  color=Position),
              size=6,
-             alpha=0.8) +
+             alpha=1) +
   coord_flip() +
-  theme_eric() +
   ggtitle('Medical school faculty salaries',
         subtitle='2017-2018') +
   xlab('') + ylab('Annual Salary ($)') +
   scale_color_discrete_qualitative(palette='Dark 3') +
-  scale_y_continuous(labels=scales::comma)
+  scale_y_continuous(labels=scales::comma,
+                     breaks=seq(40000,200000,20000)) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_line(colour='black'),
+        panel.grid.major.x = element_line(colour='#aaaaaa'),
+        panel.grid.minor = element_blank(),
+        legend.title = element_blank(),
+        legend.background = element_blank(),
+        plot.title = element_text(size = 20, margin = margin(b = 10)),
+        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
+        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
 p7_inst_note <- ggdraw(add_sub(p7_inst,
                'Data from The Chronicle of Higher Education\nSchools were ordered by average salary across all positions for which data was available',
                hjust=.0,
