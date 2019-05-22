@@ -44,19 +44,24 @@ chordDiagram(mat_region,
              order=regions_order,
              grid.col=grid.col)
 
-# TODO
-# Add states as inner layer
-k <- fromJSON(file='data/state_matrix.json')
-l <- fromJSON(file='data/states_list.json')
-state_list <- l$list
-state_list
-mat_state_temp <- k$matrix
-mat_state <- do.call(rbind, mat_state_temp)
-
-states_tr <- paste0(state_list, '-trained')
-states_pr <- paste0(state_list, '-practicing')
-rownames(mat_state) <- states_tr
-colnames(mat_state) <- states_pr
-states_order <- c(rev(states_pr), states_tr)
-chordDiagram(mat_state,
-             order=states_order)
+prac <- mat_region %>% colSums()
+train <- mat_region %>% rowSums()
+# Share of students trained in the region to stay
+mat_region/train
+mat_region
+# # TODO
+# # Add states as inner layer
+# k <- fromJSON(file='data/state_matrix.json')
+# l <- fromJSON(file='data/states_list.json')
+# state_list <- l$list
+# state_list
+# mat_state_temp <- k$matrix
+# mat_state <- do.call(rbind, mat_state_temp)
+# 
+# states_tr <- paste0(state_list, '-trained')
+# states_pr <- paste0(state_list, '-practicing')
+# rownames(mat_state) <- states_tr
+# colnames(mat_state) <- states_pr
+# states_order <- c(rev(states_pr), states_tr)
+# chordDiagram(mat_state,
+#              order=states_order)
