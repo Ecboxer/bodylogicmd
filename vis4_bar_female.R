@@ -1,5 +1,6 @@
 library(tidyverse)
 library(cowplot)
+library(colorspace)
 
 df_app_mat <- read_csv('data/factstablea1.csv')[-1,]
 df_enr <- read_csv('data/factstableb1-2.csv')
@@ -145,7 +146,7 @@ p4_dot_note
 #        width=20, height=16)
 
 # Split into top and bottom plots
-p4_dot_top <- df_dot_plot %>% head(10) %>% 
+p4_dot_top <- df_dot_plot %>% head(10) %>%
   mutate(`Medical School`=as_factor(`Medical School`),
          `Medical School`=factor(`Medical School`,
                                  levels=rev(school_order))) %>% 
@@ -154,9 +155,6 @@ p4_dot_top <- df_dot_plot %>% head(10) %>%
          -c(`Medical School`)) %>% 
   mutate(Count=Count/100) %>% 
   ggplot() +
-  geom_hline(yintercept=.5,
-             linetype='dotted',
-             size=2) +
   geom_point(aes(x=`Medical School`,
                  y=Count,
                  color=Type,
@@ -164,21 +162,31 @@ p4_dot_top <- df_dot_plot %>% head(10) %>%
              size=10,
              alpha=.8) +
   coord_flip() +
-  theme_eric() +
   ggtitle('Top 10 medical schools for female students',
           subtitle='2018-2019') +
-  xlab('') + ylab('Percentage of Students') +
+  xlab('') + ylab('Percentage of Female Students') +
   scale_y_continuous(labels=scales::percent_format(accuracy=1),
-                     limits=c(.35,.65)) +
+                     limits=c(.35,.65),
+                     breaks=seq(.4,.65,.05)) +
   scale_color_discrete_qualitative(palette='Dark 3') +
-  theme(panel.grid.major.y=element_line(colour='black'))
+  theme_minimal() +
+  theme(panel.grid.major.y = element_line(colour='#dddddd',
+                                          size=14),
+        panel.grid.major.x = element_line(colour='#000000'),
+        panel.grid.minor = element_blank(),
+        legend.title = element_blank(),
+        legend.background = element_blank(),
+        plot.title = element_text(size = 20, margin = margin(b = 10)),
+        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
+        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
 p4_dot_top
 p4_dot_top_note <- ggdraw(add_sub(p4_dot_top,
                               'Missing data for graduates of CUNY\nSchools ordered by percentage of female applicants',
                               x=.827))
 p4_dot_top_note
 
-p4_dot_bottom <- df_dot_plot %>% tail(10) %>% 
+p4_dot_bottom <- df_dot_plot %>% 
+  tail(10) %>% 
   mutate(`Medical School`=as_factor(`Medical School`),
          `Medical School`=factor(`Medical School`,
                                  levels=rev(school_order))) %>% 
@@ -187,9 +195,6 @@ p4_dot_bottom <- df_dot_plot %>% tail(10) %>%
          -c(`Medical School`)) %>% 
   mutate(Count=Count/100) %>% 
   ggplot() +
-  geom_hline(yintercept=.5,
-             linetype='dotted',
-             size=2) +
   geom_point(aes(x=`Medical School`,
                  y=Count,
                  color=Type,
@@ -197,25 +202,34 @@ p4_dot_bottom <- df_dot_plot %>% tail(10) %>%
              size=10,
              alpha=.8) +
   coord_flip() +
-  theme_eric() +
   ggtitle('Bottom 10 medical schools for female students',
           subtitle='2018-2019') +
-  xlab('') + ylab('Percentage of Students') +
+  xlab('') + ylab('Percentage of Female Students') +
   scale_y_continuous(labels=scales::percent_format(accuracy=1),
-                     limits=c(.35,.65)) +
+                     limits=c(.35,.65),
+                     breaks=seq(.4,.65,.05)) +
   scale_color_discrete_qualitative(palette='Dark 3') +
-  theme(panel.grid.major.y=element_line(colour='black'))
+  theme_minimal() +
+  theme(panel.grid.major.y = element_line(colour='#dddddd',
+                                          size=14),
+        panel.grid.major.x = element_line(colour='#000000'),
+        panel.grid.minor = element_blank(),
+        legend.title = element_blank(),
+        legend.background = element_blank(),
+        plot.title = element_text(size = 20, margin = margin(b = 10)),
+        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
+        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
 p4_dot_bottom
 p4_dot_bottom_note <- ggdraw(add_sub(p4_dot_bottom,
                                   'Missing data for graduates of Carle Illinois\nSchools ordered by percentage of female applicants',
                                   x=.827))
 p4_dot_bottom_note
 
-# ggsave('vis4_dot_top.svg', 
+# ggsave('vis4_dot_top.svg',
 #        plot=p4_dot_top_note,
 #        device='svg', path='assets',
 #        width=20, height=16)
-# ggsave('vis4_dot_bottom.svg', 
+# ggsave('vis4_dot_bottom.svg',
 #        plot=p4_dot_bottom_note,
 #        device='svg', path='assets',
 #        width=20, height=16)
