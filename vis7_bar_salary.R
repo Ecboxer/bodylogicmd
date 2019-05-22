@@ -46,8 +46,9 @@ p7_inst <- df_salary %>%
   scale_y_continuous(labels=scales::comma,
                      breaks=seq(40000,200000,20000)) +
   theme_minimal() +
-  theme(panel.grid.major.y = element_line(colour='black'),
-        panel.grid.major.x = element_line(colour='#aaaaaa'),
+  theme(panel.grid.major.y = element_line(colour='#dddddd',
+                                          size=6),
+        panel.grid.major.x = element_line(colour='white'),
         panel.grid.minor = element_blank(),
         legend.title = element_blank(),
         legend.background = element_blank(),
@@ -59,7 +60,7 @@ p7_inst_note <- ggdraw(add_sub(p7_inst,
                hjust=.0,
                x=0))
 p7_inst_note
-# ggsave('vis7_inst.svg', plot=p7_inst_note,
+# ggsave('vis7_inst_grey.svg', plot=p7_inst_note,
 #        device='svg', path='assets',
 #        width=20, height=16)
 
