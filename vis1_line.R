@@ -179,7 +179,7 @@ p1_bfly <- ggplot(df_bfly, aes(x=Region,
                      breaks=seq(-.35,.35,.05))
 p1_bfly
 df_bfly
-p1_db <- df_bfly %>% 
+p1_db <- df_bfly %>%
   spread(student_type,perc_students) %>% 
   mutate(Applications=-1*Applications,
          app_lab=round(Applications,3)*100,
@@ -192,7 +192,7 @@ p1_db <- df_bfly %>%
              group=Region)) +
   geom_segment(aes(yend=Region),
                color='black',
-               size=4,
+               size=2,
                show.legend=T) +
   geom_dumbbell(colour_x='#a3c4dc',
                 colour_xend='#0e668b',
@@ -209,7 +209,6 @@ p1_db <- df_bfly %>%
             vjust=-2,
             aes(x=Matriculations, 
                 label=mat_lab)) +
-  theme_eric() +
   ggtitle('Share of medical school applications and matriculations by region',
           subtitle='Averages taken over the period 2009-2018') +
   xlab('Percentage of students') +
@@ -219,7 +218,16 @@ p1_db <- df_bfly %>%
                      limits=c(.2,.35)) +
   scale_color_manual(name='',
                      values=c('Applications'='#a3c4dc',
-                              'Matriculations'='#0e668b'))
+                              'Matriculations'='#0e668b')) +
+  theme_minimal() +
+  theme(panel.grid.major.y = element_line(colour='#bbbbbb'),
+        panel.grid.major.x = element_line(colour='#000000'),
+        panel.grid.minor = element_blank(),
+        legend.title = element_blank(),
+        legend.background = element_blank(),
+        plot.title = element_text(size = 20, margin = margin(b = 10)),
+        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
+        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
 p1_db_note <- p1_db + 
   annotate('text',
                  x=.213, y=4.3,
