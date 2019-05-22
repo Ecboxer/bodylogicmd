@@ -110,6 +110,8 @@ p7_spec <- df_spec_both %>%
           subtitle='2018-2019') +
   xlab('') + ylab('Median salary ($)')
 p7_spec
-# ggsave('vis7_spec.svg', plot=p7_spec,
+p7_spec_note <- ggdraw(add_sub(p7_spec,
+               'Figure displays 10 highest and lowest paid specialties for medical school faculty,\nout of 107 specialties identified in the AAMC Faculty Salary Report 2018/2019'))
+# ggsave('vis7_spec.svg', plot=p7_spec_note,
 #        device='svg', path='assets',
 #        width=20, height=16)

@@ -326,6 +326,8 @@ p2_sankey_trunc <- sankeyNetwork(Links=df_sankey_trunc,
                                  fontSize=16,
                                  nodeWidth=30,
                                  iterations=0)
+p2_sankey_trunc <- htmlwidgets::prependContent(p2_sankey_trunc,
+                            htmltools::tags$h1('Sex of medical students in 2018-2019'))
 p2_sankey_trunc
 
 # From Census data 2010
@@ -352,4 +354,5 @@ p2_sankey_census <- sankeyNetwork(Links=df_sankey_census,
                                  fontSize=16,
                                  nodeWidth=30,
                                  iterations=0)
+
 p2_sankey_census
