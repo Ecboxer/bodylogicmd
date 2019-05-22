@@ -88,27 +88,35 @@ get_name <- function (state_abb) {
 }
 df_enr_total$region <- df_enr_total$State %>%
   lapply(get_name) %>% unlist()
+df_enr_total %>% head()
+df_pop_sb %>% head()
+total_enr <- df_enr_total %>% 
+  select(total) %>% sum()
 df_pop_sb_norm <- merge(df_pop_sb,
                         df_enr_total,
                         by=c('region')) %>% 
-  mutate(pop_norm=ifelse(total!=0,
-                         popularity/total*100,
-                         0))
+  mutate(n_students=popularity*total_enr/100,
+         stud_per_1000=ifelse(total==0,
+                              0,
+                              n_students/total*1000))
+df_pop_sb_norm %>% head()
 df_pop_sb_norm <- df_pop_sb_norm %>% 
-  select(state=region, pop_norm)
+  select(state=region, stud_per_1000)
 
 # Normalized for student population
-p5_sb <- statebins_continuous(df_pop_sb_norm,
-                     state_col='state',
-                     text_color='Black',
-                     value_col='pop_norm',
-                     brewer_pal='Blues',
-                     fontSize=4,
-                     legend_title='Measure of popularity',
-                     legend_position='bottom')
+# Change to %
+df_pop_sb_norm %>% head()
+p5_sb <- statebins(
+  df_pop_sb_norm,
+  value_col='stud_per_1000',
+  name='Number of students\nplanning to practice,\nper 1000 currently\nenrolled students',
+  palette='Blues',
+  direction=1,
+  font_size=6
+) +
+  theme_statebins(legend_position='right')
 p5_sb_note <- ggdraw(add_sub(p5_sb,
-               'Popularity is measured as the percentage of medical students planning to practice in a state,\n normalized by the total medical student population for that state\n
-               Legend goes from 0.00 to 0.25 in increments of 0.05'))
+               'Popularity was measured as the number of medical students planning to\npractice in each state, and normalized to the number of medical\nstudents per 1000 medical students enrolled in that state'))
 p5_sb_note
 # ggsave('vis5_sb.svg', plot=p5_sb_note,
 #        device='svg', path='assets',
