@@ -288,3 +288,68 @@ p2_sankey_other <- sankeyNetwork(Links=df_sankey_other,
               fontSize=16,
               nodeWidth=30)
 p2_sankey_other
+
+# Revision
+# Keep sex -> Race
+df_sankey_trunc <- df_sankey_other %>%
+  filter(source_idx_other < 2)
+df_nodes_trunc <- df_nodes_other[1:7,]
+df_nodes_trunc_order <- tibble(name=c('Men','Women','White','Asian',
+              'Black or African American',
+              'Hispanic, Latino, or of Spanish Origin',
+              'Other'))
+df_nodes_trunc
+df_nodes_trunc_order
+reorder_target <- function(idx) {
+  if(idx==2) {
+    return(3)
+  } else if (idx==3) {
+    return(4)
+  } else if (idx==4) {
+    return(5)
+  } else if (idx==5) {
+    return(2)
+  } else {
+    return(idx)
+  }
+}
+df_sankey_trunc$target_idx_trunc <- df_sankey_trunc$target_idx_other %>% 
+  lapply(reorder_target) %>% unlist()
+df_sankey_trunc
+p2_sankey_trunc <- sankeyNetwork(Links=df_sankey_trunc,
+                                 Nodes=df_nodes_trunc_order,
+                                 Source='source_idx_other',
+                                 Target='target_idx_trunc',
+                                 Value='value',
+                                 NodeID='name',
+                                 units='enrolled students',
+                                 fontSize=16,
+                                 nodeWidth=30,
+                                 iterations=0)
+p2_sankey_trunc
+
+# From Census data 2010
+# https://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?src=bkmk
+# Other as "American Indian and Alaska Native",
+# "Native Hawaiian and Other Pacific Islandas",
+# "Two or More Raes"
+df_sankey_trunc
+df_nodes_trunc_order
+source_char <- c(0,0,0,0,0,1,1,1,1,1)
+target_char <- c(2,3,4,5,6,2,3,4,5,6)
+value_char <- c(97017621,6969823,18068911,25618800,4106171,
+                100301335,7691693,19853611,24858794,4258779)
+df_sankey_census <- tibble(source=source_char,
+       target=target_char,
+       value=value_char)
+p2_sankey_census <- sankeyNetwork(Links=df_sankey_census,
+                                 Nodes=df_nodes_trunc_order,
+                                 Source='source',
+                                 Target='target',
+                                 Value='value',
+                                 NodeID='name',
+                                 units='American residents',
+                                 fontSize=16,
+                                 nodeWidth=30,
+                                 iterations=0)
+p2_sankey_census
