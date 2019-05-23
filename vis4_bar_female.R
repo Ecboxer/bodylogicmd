@@ -146,7 +146,8 @@ p4_dot_note
 #        width=20, height=16)
 
 # Split into top and bottom plots
-p4_dot_top <- df_dot_plot %>% head(10) %>%
+p4_dot_top <- df_dot_plot %>% 
+  head(10) %>%
   mutate(`Medical School`=as_factor(`Medical School`),
          `Medical School`=factor(`Medical School`,
                                  levels=rev(school_order))) %>% 
@@ -166,19 +167,10 @@ p4_dot_top <- df_dot_plot %>% head(10) %>%
           subtitle='2018-2019') +
   xlab('') + ylab('Percentage of Female Students') +
   scale_y_continuous(labels=scales::percent_format(accuracy=1),
-                     limits=c(.35,.65),
-                     breaks=seq(.4,.65,.05)) +
+                     limits=c(.34,.66),
+                     breaks=seq(.34,.66,.02)) +
   scale_color_discrete_qualitative(palette='Dark 3') +
-  theme_minimal() +
-  theme(panel.grid.major.y = element_line(colour='#dddddd',
-                                          size=14),
-        panel.grid.major.x = element_line(colour='#000000'),
-        panel.grid.minor = element_blank(),
-        legend.title = element_blank(),
-        legend.background = element_blank(),
-        plot.title = element_text(size = 20, margin = margin(b = 10)),
-        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
-        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
+  theme_eric()
 p4_dot_top
 p4_dot_top_note <- ggdraw(add_sub(p4_dot_top,
                               'Missing data for graduates of CUNY\nSchools ordered by percentage of female applicants',
@@ -206,19 +198,10 @@ p4_dot_bottom <- df_dot_plot %>%
           subtitle='2018-2019') +
   xlab('') + ylab('Percentage of Female Students') +
   scale_y_continuous(labels=scales::percent_format(accuracy=1),
-                     limits=c(.35,.65),
-                     breaks=seq(.4,.65,.05)) +
+                     limits=c(.34,.66),
+                     breaks=seq(.34,.66,.02)) +
   scale_color_discrete_qualitative(palette='Dark 3') +
-  theme_minimal() +
-  theme(panel.grid.major.y = element_line(colour='#dddddd',
-                                          size=14),
-        panel.grid.major.x = element_line(colour='#000000'),
-        panel.grid.minor = element_blank(),
-        legend.title = element_blank(),
-        legend.background = element_blank(),
-        plot.title = element_text(size = 20, margin = margin(b = 10)),
-        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
-        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
+  theme_eric()
 p4_dot_bottom
 p4_dot_bottom_note <- ggdraw(add_sub(p4_dot_bottom,
                                   'Missing data for graduates of Carle Illinois\nSchools ordered by percentage of female applicants',

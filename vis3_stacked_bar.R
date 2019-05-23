@@ -116,7 +116,8 @@ p3_bar_mat_other <- df_mat %>%
   theme_eric() +
   ggtitle(label='Race/ethnicity of medical school students by state of legal residence',
           subtitle='2018-2019') +
-  scale_y_continuous(labels=scales::percent_format(accuracy=1)) +
+  scale_y_continuous(labels=scales::percent_format(accuracy=1),
+                     breaks=seq(0,1,.1)) +
   labs(fill='Race/Ethnicity') +
   xlab('') + ylab('Percentage of students')
 p3_bar_mat_other

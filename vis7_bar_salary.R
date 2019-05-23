@@ -45,16 +45,7 @@ p7_inst <- df_salary %>%
   scale_color_discrete_qualitative(palette='Dark 3') +
   scale_y_continuous(labels=scales::comma,
                      breaks=seq(40000,200000,20000)) +
-  theme_minimal() +
-  theme(panel.grid.major.y = element_line(colour='#dddddd',
-                                          size=6),
-        panel.grid.major.x = element_line(colour='white'),
-        panel.grid.minor = element_blank(),
-        legend.title = element_blank(),
-        legend.background = element_blank(),
-        plot.title = element_text(size = 20, margin = margin(b = 10)),
-        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
-        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
+  theme_eric()
 p7_inst_note <- ggdraw(add_sub(p7_inst,
                'Data from The Chronicle of Higher Education\nSchools were ordered by average salary across all positions for which data was available',
                hjust=.0,

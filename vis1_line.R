@@ -146,7 +146,7 @@ df_bfly <- df_bfly %>%
          Region=factor(Region,
                       levels=region_order))
 df_bfly
-p1_bfly <- ggplot(df_bfly, aes(x=Region,
+p1_bfly <-ggplot(df_bfly, aes(x=Region,
                     y=perc_students,
                     fill=student_type)) +
   geom_bar(data=subset(df_bfly,
@@ -170,7 +170,7 @@ p1_bfly <- ggplot(df_bfly, aes(x=Region,
             size=8,
             position=position_stack(vjust=0.5)) +
   coord_flip() +
-  theme_eric() +
+  theme_eric(base_size=20) +
   ggtitle('Medical school applications and matriculations by region',
           subtitle='Averages taken over the period 2009-2018') +
   xlab('Region') + ylab('Percentage of students') +
@@ -179,7 +179,7 @@ p1_bfly <- ggplot(df_bfly, aes(x=Region,
                      breaks=seq(-.35,.35,.05))
 p1_bfly
 df_bfly
-p1_db <- df_bfly %>%
+p1_db <-df_bfly %>%
   spread(student_type,perc_students) %>% 
   mutate(Applications=-1*Applications,
          app_lab=round(Applications,3)*100,
@@ -219,15 +219,7 @@ p1_db <- df_bfly %>%
   scale_color_manual(name='',
                      values=c('Applications'='#a3c4dc',
                               'Matriculations'='#0e668b')) +
-  theme_minimal() +
-  theme(panel.grid.major.y = element_line(colour='#bbbbbb'),
-        panel.grid.major.x = element_line(colour='#000000'),
-        panel.grid.minor = element_blank(),
-        legend.title = element_blank(),
-        legend.background = element_blank(),
-        plot.title = element_text(size = 20, margin = margin(b = 10)),
-        plot.subtitle = element_text(size = 10, color = "darkslategrey", margin = margin(b = 25)),
-        plot.caption = element_text(size = 8, margin = margin(t = 10), color = "grey70", hjust = 0))
+  theme_eric()
 p1_db_note <- p1_db + 
   annotate('text',
                  x=.213, y=4.3,
