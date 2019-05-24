@@ -329,6 +329,13 @@ p2_sankey_trunc <- sankeyNetwork(Links=df_sankey_trunc,
 p2_sankey_trunc <- htmlwidgets::prependContent(p2_sankey_trunc,
                             htmltools::tags$h1('Sex of medical students in 2018-2019'))
 p2_sankey_trunc
+# df_sankey_trunc %>%
+#   select(source=source_idx_other,
+#          target=target_idx_other,
+#          value) %>% 
+#   write_csv('links_med_student_sankey.csv')
+# df_nodes_trunc_order %>%
+#   write_csv('nodes_sankey.csv')
 
 # From Census data 2010
 # https://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?src=bkmk
@@ -356,3 +363,5 @@ p2_sankey_census <- sankeyNetwork(Links=df_sankey_census,
                                  iterations=0)
 
 p2_sankey_census
+# df_sankey_census %>% 
+#   write_csv('links_census_sankey.csv')
